@@ -112,7 +112,20 @@ const getWinningAmount = (rows, bet, lines) => {
   for(let row = 0; row < lines; row++) {
     const symbols = rows[row];
     let allSame = true;
+
+    for(const symbol of symbols) {
+      if (symbol != symbols[0]) {
+        allSame = false;
+        break;
+      }
+    }
+
+    if(allSame) {
+      winnings += bet * SYMBOLS_VALUE[symbols[0]];
+    }
   }
+
+  return winnings;
 }
 
 const getBet = (balance, lines) => {
