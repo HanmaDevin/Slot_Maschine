@@ -35,8 +35,9 @@ const spin = () => {
     }
   }
 
-  const maschine = [[], [], []];
+  const maschine = [];
   for (let i = 0; i < COLS; i++) {
+    maschine.push([]);
     const maschineSymbols = [...symbols]; // copy symbols from 'symbols' array
     for (let j = 0; j < ROWS; j++) {
       const randomIndex = Math.floor(Math.random() * maschineSymbols.length);
@@ -78,6 +79,42 @@ const getNumberOfLinesToBetOn = () => {
   }
 };
 
+const transpose = (maschine) => {
+  const transposed = [];
+
+  for(let i = 0; i < ROWS; i++) {
+    transposed.push([]);
+    for(let j = 0; j < COLS; j++) {
+      transposed[i].push(maschine[j][i]);
+    }
+  }
+
+  return transposed;
+};
+
+const printSpin = (maschine) => {
+  console.log("Your Spin!: ");
+  for(const row of maschine) {
+    let rowString = "";
+    for(const [i, symbol] of row.entries()) {
+      rowString += symbol;
+      if (i != row.length - 1) {
+        rowString += " | ";
+      }
+    }
+    console.log(rowString);
+  }
+};
+
+const getWinningAmount = (rows, bet, lines) => {
+  let winnings = 0;
+
+  for(let row = 0; row < lines; row++) {
+    const symbols = rows[row];
+    let allSame = true;
+  }
+}
+
 const getBet = (balance, lines) => {
   while (true) {
     const bet = prompt("Enter your bet: ");
@@ -94,7 +131,10 @@ const getBet = (balance, lines) => {
   }
 };
 
-const maschine = spin();
+
 let balance = deposit();
 const numberOfLines = getNumberOfLinesToBetOn();
 const bet = getBet(balance, numberOfLines);
+const maschine = spin();
+const transposed = transpose(maschine);
+printSpin(maschine);
