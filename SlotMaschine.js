@@ -82,9 +82,9 @@ const getNumberOfLinesToBetOn = () => {
 const transpose = (maschine) => {
   const transposed = [];
 
-  for(let i = 0; i < ROWS; i++) {
+  for (let i = 0; i < ROWS; i++) {
     transposed.push([]);
-    for(let j = 0; j < COLS; j++) {
+    for (let j = 0; j < COLS; j++) {
       transposed[i].push(maschine[j][i]);
     }
   }
@@ -94,9 +94,9 @@ const transpose = (maschine) => {
 
 const printSpin = (maschine) => {
   console.log("Your Spin: ");
-  for(const row of maschine) {
+  for (const row of maschine) {
     let rowString = "";
-    for(const [i, symbol] of row.entries()) {
+    for (const [i, symbol] of row.entries()) {
       rowString += symbol;
       if (i != row.length - 1) {
         rowString += " | ";
@@ -109,18 +109,18 @@ const printSpin = (maschine) => {
 const getWinningAmount = (rows, bet, lines) => {
   let winnings = 0;
 
-  for(let row = 0; row < lines; row++) {
+  for (let row = 0; row < lines; row++) {
     const symbols = rows[row];
     let allSame = true;
 
-    for(const symbol of symbols) {
+    for (const symbol of symbols) {
       if (symbol != symbols[0]) {
         allSame = false;
         break;
       }
     }
 
-    if(allSame) {
+    if (allSame) {
       winnings += bet * SYMBOLS_VALUE[symbols[0]];
     }
   }
@@ -144,16 +144,26 @@ const getBet = (balance, lines) => {
   }
 };
 
+const game = () => {
+  let balance = deposit();
+  while (balance > 0) {
+    console.log("Yor balance is $" + balance);
+    const numberOfLines = getNumberOfLinesToBetOn();
+    const bet = getBet(balance, numberOfLines);
+    balance = balance - bet * numberOfLines;
+    const maschine = spin();
+    const transposed = transpose(maschine);
+    printSpin(maschine);
+    const winnings = getWinningAmount(maschine, bet, numberOfLines);
+    balance = balance + winnings;
+    console.log("You won, $" + winnings.toString());
 
-let balance = deposit();
-while(balance > 0) {
-  const numberOfLines = getNumberOfLinesToBetOn();
-  const bet = getBet(balance, numberOfLines);
-  balance = balance - bet;
-  const maschine = spin();
-  const transposed = transpose(maschine);
-  printSpin(maschine);
-  const winnings = getWinningAmount(maschine, bet, numberOfLines);
-  balance = balance + winnings;
-  console.log("You won, $" + winnings.toString());
-}
+    const playAgain = prompt("Do you want to play again (y/n)? ");
+
+    if(playAgain == "n" || playAgain == "N"){
+      break;
+    }
+  }
+};
+
+game();
