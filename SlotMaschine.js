@@ -93,7 +93,7 @@ const transpose = (maschine) => {
 };
 
 const printSpin = (maschine) => {
-  console.log("Your Spin!: ");
+  console.log("Your Spin: ");
   for(const row of maschine) {
     let rowString = "";
     for(const [i, symbol] of row.entries()) {
@@ -126,7 +126,7 @@ const getWinningAmount = (rows, bet, lines) => {
   }
 
   return winnings;
-}
+};
 
 const getBet = (balance, lines) => {
   while (true) {
@@ -146,8 +146,14 @@ const getBet = (balance, lines) => {
 
 
 let balance = deposit();
-const numberOfLines = getNumberOfLinesToBetOn();
-const bet = getBet(balance, numberOfLines);
-const maschine = spin();
-const transposed = transpose(maschine);
-printSpin(maschine);
+while(balance > 0) {
+  const numberOfLines = getNumberOfLinesToBetOn();
+  const bet = getBet(balance, numberOfLines);
+  balance = balance - bet;
+  const maschine = spin();
+  const transposed = transpose(maschine);
+  printSpin(maschine);
+  const winnings = getWinningAmount(maschine, bet, numberOfLines);
+  balance = balance + winnings;
+  console.log("You won, $" + winnings.toString());
+}
